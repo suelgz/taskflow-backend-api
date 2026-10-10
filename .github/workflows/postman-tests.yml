@@ -10,6 +10,7 @@ on:
       - 'scripts/**'
       - 'package.json'
       - 'postman/TaskFlow.postman_collection.json'
+      - 'README.md'
   workflow_dispatch:
 
 permissions:
