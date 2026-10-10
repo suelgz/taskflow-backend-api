@@ -1,0 +1,15 @@
+TaskFlow Node.js automated tests
+
+npm test
+
+PASS 1 - POST /tasks creates task (201)
+PASS 2 - GET /tasks lists tasks (200)
+PASS 3 - GET /tasks/:id shows details (200)
+PASS 4 - PUT /tasks/:id updates task (200)
+PASS 5 - DELETE /tasks/:id removes task (200)
+PASS 6 - Missing task and invalid input return 404 / 400
+PASS 7 - Logger captures timestamp, method, endpoint
+
+Tests: 7, Passed: 7, Failed: 0
+
+Note: These are Node.js unit tests, not Postman UI screenshots.
