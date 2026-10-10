@@ -1,0 +1,60 @@
+name: TaskFlow - Postman CRUD Tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/postman-tests.yml'
+      - 'src/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'postman/TaskFlow.postman_collection.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  postman:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install backend dependencies
+        run: npm install --no-audit --no-fund
+      - name: Run local unit tests
+        run: npm test
+      - name: Install Postman collection runner
+        run: npm install --global newman
+      - name: Start live API
+        run: |
+          node src/server.js > /tmp/taskflow-api.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:3000/ > /dev/null; then
+              echo "TaskFlow API is running"
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/taskflow-api.log
+          exit 1
+      - name: Run five actual Postman collection HTTP requests
+        run: |
+          mkdir -p postman/results postman/screenshots
+          newman run postman/TaskFlow.postman_collection.json \
+            --reporters cli,json \
+            --reporter-json-export postman/results/newman-results.json
+      - name: Capture genuine Newman result screens (not Postman desktop UI)
+        run: python3 scripts/render-test-evidence.py
+      - name: Commit test results and images
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add postman/results/newman-results.json postman/results/summary.json postman/screenshots/*.png
+          if ! git diff --cached --quiet; then
+            git commit -m "Add real Newman Postman CRUD results and evidence images"
+            git push
+          fi
