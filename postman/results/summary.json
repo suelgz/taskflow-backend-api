@@ -1,0 +1,47 @@
+{
+  "runner": "Newman (official Postman collection runner)",
+  "type": "Real HTTP executions",
+  "image_provenance": "Chromium screenshots of Newman result reports, not Postman app UI",
+  "tests": [
+    {
+      "name": "01 - Create task",
+      "method": "POST",
+      "httpStatus": 201,
+      "assertions": 2,
+      "passed": true,
+      "image": "01-create.png"
+    },
+    {
+      "name": "02 - List tasks",
+      "method": "GET",
+      "httpStatus": 200,
+      "assertions": 2,
+      "passed": true,
+      "image": "02-list.png"
+    },
+    {
+      "name": "03 - Get task details",
+      "method": "GET",
+      "httpStatus": 200,
+      "assertions": 2,
+      "passed": true,
+      "image": "03-detail.png"
+    },
+    {
+      "name": "04 - Update task",
+      "method": "PUT",
+      "httpStatus": 200,
+      "assertions": 2,
+      "passed": true,
+      "image": "04-update.png"
+    },
+    {
+      "name": "05 - Delete task",
+      "method": "DELETE",
+      "httpStatus": 200,
+      "assertions": 2,
+      "passed": true,
+      "image": "05-delete.png"
+    }
+  ]
+}
